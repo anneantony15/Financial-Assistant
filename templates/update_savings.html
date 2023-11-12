@@ -1,0 +1,10 @@
+<!-- app1/templates/update_savings.html -->
+
+
+  <h2>Update Savings</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+  </form>
+

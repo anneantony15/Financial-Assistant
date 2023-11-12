@@ -1,0 +1,23 @@
+from django.shortcuts import render,redirect,HttpResponse
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate,login,logout
+from django.contrib.auth.decorators import login_required
+from .models import UserProfile
+from .forms import UserProfileForm
+
+@login_required(login_url='login')  # Requires the user to be logged in to access this view
+def create_profile(request):
+    # Check if the user already has a profile
+    user_profile, created = UserProfile.objects.get_or_create(user=request.user)
+
+    if request.method == 'POST':
+        # If the form is submitted, update the user profile with the form data
+        form = UserProfileForm(request.POST, instance=user_profile)
+        if form.is_valid():
+            form.save()
+    else:
+        # If it's a GET request, initialize the form with the current user profile data
+        form = UserProfileForm(instance=user_profile)
+
+    return render(request, 'create_profile.html', {'form': form, 'user_data': user_profile})
+# Create your views here.
